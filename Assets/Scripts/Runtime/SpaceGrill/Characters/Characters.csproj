@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>SpaceGrill</RootNamespace>
+    <BaseIntermediateOutputPath>..\..\..\..\..\obj\</BaseIntermediateOutputPath>
+    <BaseOutputPath>..\..\..\..\..\bin\</BaseOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="*.meta" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Unity3D.SDK" Version="2021.1.14.1" />
+    <PackageReference Include="VContainer.Standalone.Unity" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="*.asmdef" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Abstractions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpaceGrill.csproj" />
+  </ItemGroup>
+</Project>
