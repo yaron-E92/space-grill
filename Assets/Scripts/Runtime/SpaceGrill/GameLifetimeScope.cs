@@ -28,7 +28,6 @@ namespace SpaceGrill
             builder.Register<UnityInputFacade>(Lifetime.Singleton).As<IPlayerInput>();
             builder.RegisterEntryPoint<PlayerController>(Lifetime.Singleton).As<ICharacterController>();
             builder.RegisterComponentInHierarchy<PlayerBehaviour>().WithParameter(_animator);
-            builder.RegisterComponentInHierarchy<CameraBehaviour>().WithParameter(_player);
         }
     }
 }

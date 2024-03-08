@@ -11,13 +11,10 @@ namespace SpaceGrill.Settings
         [SerializeField]
         private float _accelerationThreshold = 0.001F;
         [SerializeField]
-        private float frictionCoefficient = 0.5F;
-        public float VelocityThreshold => 5 * FrictionCoefficient;
+        public float VelocityThreshold = 0.01f;
 
         public float AccelerationCoefficient => _accelerationCoefficient;
 
         public float AccelerationThreshold => _accelerationThreshold;
-
-        public float FrictionCoefficient => frictionCoefficient;
     }
 }
