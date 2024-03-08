@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using SpaceGrill.Utility;
 
 using VContainer.Unity;
 
@@ -6,9 +6,9 @@ namespace SpaceGrill.Characters
 {
     public interface ICharacterController : IInitializable, ITickable
     {
-        Vector3 Acceleration { get; }
-        Vector3 Velocity { get; }
-        bool IsWalking { get; }
+        IVector Acceleration { get; }
+        IVector Velocity { get; }
+        bool IsMoving { get; }
         float Speed { get; }
     }
 }

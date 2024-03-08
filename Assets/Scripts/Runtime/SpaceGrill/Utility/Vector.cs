@@ -1,19 +1,22 @@
-﻿namespace SpaceGrill.Utility
+﻿using System;
+
+namespace SpaceGrill.Utility
 {
     public class Vector : IVector
     {
+        // To avoid unnecessary allocations every time an overriden operator is used
+        static readonly Vector OperationsVector = new Vector(1, 1);
+        public float X { get; private set; }
+
+        public float Y { get; private set; }
+
+        public float Magnitude => (float)Math.Sqrt((X * X) + (Y * Y));
 
         public Vector(float x, float y)
         {
             X = x;
             Y = y;
         }
-
-        // To avoid unnecessary allocations every time an overriden operator is used
-        static readonly Vector OperationsVector = new Vector(1, 1);
-        public float X { get; private set; }
-
-        public float Y { get; private set; }
 
         public override bool Equals(object obj)
         {
@@ -41,6 +44,12 @@
             Y += y;
         }
 
+        public void Translate(IVector vector)
+        {
+            X += vector.X;
+            Y += vector.Y;
+        }
+
         public void TranslateToAnotherVector(IVector vector)
         {
             TranslateToCoordinates(vector.X, vector.Y);
@@ -53,11 +62,28 @@
             Translate(xTranslation, yTranslation);
         }
 
+        public static Vector operator *(Vector vector, int multiplier)
+        {
+            return vector * (float) multiplier;
+        }
+
+        public static Vector operator *(Vector vector, float multiplier)
+        {
+            vector.TranslateToCoordinates(vector.X * multiplier,
+                vector.Y * multiplier);
+            return vector;
+        }
+
         public static Vector operator /(Vector vector, int divider)
         {
-            OperationsVector.TranslateToCoordinates(vector.X / divider,
+            return vector / (float) divider;
+        }
+
+        public static Vector operator /(Vector vector, float divider)
+        {
+            vector.TranslateToCoordinates(vector.X / divider,
                 vector.Y / divider);
-            return OperationsVector;
+            return vector;
         }
 
         /// <summary>

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: GameSettings
   m_EditorClassIdentifier: 
   physicsSettings:
-    _accelerationCoefficient: 10
+    _accelerationCoefficient: 100
     _accelerationThreshold: 0.001
-    frictionCoefficient: 0.5
+    VelocityThreshold: 0.01

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using SpaceGrill.Utility;
 
 using UnityEngine;
 
@@ -11,6 +11,23 @@ namespace SpaceGrill.Characters
         [SerializeField]
         private float _walkingAnimationCoefficient = 0.1F;
 
+        /// <summary>
+        /// Max speed of the player.
+        /// </summary>
+        [SerializeField]
+        private float _maxXSpeed = 10;
+
+        public float MaxXSpeed => _maxXSpeed;
+
+        public float DeltaTime => Time.deltaTime;
+
+        private Rigidbody2D _rigidBody;
+
+        [SerializeField]
+        private float _pulseMagnitude = 500;
+
+        private Vector2 _pulseForce;
+
         //private Collider Collider;
 
         //readonly Dictionary<PlayerMode, Color> modeToColor = new Dictionary<PlayerMode, Color>()
@@ -18,16 +35,16 @@ namespace SpaceGrill.Characters
 
         private Animator _animator;
 
-        //private bool IsWalking => _playerController.IsWalking;
-
         [Inject]
         void Construct(Animator animator)
         {
             _animator = animator;
+            _rigidBody = GetComponent<Rigidbody2D>();
+            _pulseForce = new Vector2(0, _pulseMagnitude);
         }
 
         // Update is called once per frame
-        internal void UpdatePosition(Vector3 velocity)
+        internal void UpdateVelocity(Vector velocity, bool isPulsing)
         {
             //_animator.SetBool("IsWalking", IsWalking);
 
@@ -36,7 +53,16 @@ namespace SpaceGrill.Characters
             //    _animator.SetFloat("Speed", _playerController.Speed * _walkingAnimationCoefficient);
             //}
 
-            transform.Translate(velocity * Time.deltaTime);
+            _rigidBody.velocity = new Vector2(velocity.X, _rigidBody.velocity.y);
+            if (isPulsing )
+            {
+                _rigidBody.AddForce(_pulseForce);
+            }
+
+            if (transform.position.y < -5.5f || transform.position.y > 4.5f)
+            {
+                ((UnityVector2Facade)(transform.position.x, 4.5f)).TranslateUnityTransformToThis(transform);
+            }
         }
 
         //internal void OnModeToggled(PlayerMode mode)
