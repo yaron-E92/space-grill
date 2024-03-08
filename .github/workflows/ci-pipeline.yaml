@@ -1,0 +1,116 @@
+# This workflow will build and test a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Continous integration pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  gitVersion:
+    runs-on: ubuntu-latest
+    outputs:
+      branchName: ${{ steps.gitversion.outputs.branchName }} # To use an output in another job, you have to map it to a job output.
+      semVer: ${{ steps.gitversion.outputs.semVer }}
+      sha: ${{ steps.gitversion.outputs.sha }}
+      nugetVersion: ${{ steps.gitversion.outputs.nuGetVersion }}
+      assemblySemFileVer: ${{ steps.gitversion.outputs.assemblySemFileVer }}
+      informationalVersion: ${{ steps.gitversion.outputs.informationalVersion }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0
+      with:
+        versionSpec: '5.x'
+        preferLatestVersion: true
+    - name: Determine Version
+      id:   gitversion # id to later be referenced
+      uses: gittools/actions/gitversion/execute@v0
+      with:
+        additionalArguments: '/updateprojectfiles'
+        useConfigFile: true
+        configFilePath: '.github/GitVersion.yaml'
+
+  buildAndTestCSharp:
+    needs: [gitVersion]
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
+      contents: read
+    env:
+      SOLUTION_PATH: "Assets/Scripts/SpaceGrill.sln"
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore $SOLUTION_PATH
+    - name: Build
+      run: dotnet build --no-restore $SOLUTION_PATH
+    - name: Test
+      run: dotnet test $SOLUTION_PATH --logger "trx" --no-build --verbosity normal /p:AssemblyVersion=${{ needs.gitVersion.outputs.assemblySemFileVer }} /p:FileVersion=${{ needs.gitVersion.outputs.assemblySemFileVer }} /p:InformationalVersion=${{ needs.gitVersion.outputs.informationalVersion }}
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: |
+          tests/**/TestResults/*.xml
+          tests/**/TestResults/*.trx
+          tests/**/TestResults/*.json
+
+  buildAndTestUnity:
+    needs: [gitVersion]
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+    if: false # Skip this job until the unity license is acquired
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v3
+    # Cache for faster builds and tests
+    - uses: actions/cache@v3
+      with:
+        path: Library
+        key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+        restore-keys: |
+          Library-
+    - name: Run tests
+      uses: game-ci/unity-test-runner@v3
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build project
+      uses: game-ci/unity-builder@v3
+      env:
+        UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+        UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+  tagAndRelease:
+    needs: [gitVersion, buildAndTestCSharp]
+    runs-on: ubuntu-latest
+    if: contains(needs.gitVersion.outputs.branchName, 'main')
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Tag on main
+      run: |
+          git config --global user.name "Github actions: gitversion"
+          git config --global user.email "gitversion@github-actions.com"
+          git tag -a "${{ needs.gitVersion.outputs.semVer}}" -m "Version ${{ needs.gitVersion.outputs.semVer}}"
+          git push --tags
