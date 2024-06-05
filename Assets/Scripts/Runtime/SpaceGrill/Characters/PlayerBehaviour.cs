@@ -1,5 +1,5 @@
 ﻿using SpaceGrill.Utility;
-
+using System;
 using UnityEngine;
 
 using VContainer;
@@ -8,8 +8,9 @@ namespace SpaceGrill.Characters
 {
     public class PlayerBehaviour : MonoBehaviour
     {
-        [SerializeField]
-        private float _walkingAnimationCoefficient = 0.1F;
+        private const float ScreenWidthMinusPlayerRadius = 9.5f;
+        private const float ScreenHeightMinusPlayerRadius = 4.5f;
+        private const float PlayerDiameter = 1.0f;
 
         /// <summary>
         /// Max speed of the player.
@@ -28,11 +29,6 @@ namespace SpaceGrill.Characters
 
         private Vector2 _pulseForce;
 
-        //private Collider Collider;
-
-        //readonly Dictionary<PlayerMode, Color> modeToColor = new Dictionary<PlayerMode, Color>()
-        //{ {PlayerMode.FreeMovementMode, Color.green }, {PlayerMode.BuilderMode, Color.red } };
-
         private Animator _animator;
 
         [Inject]
@@ -46,28 +42,21 @@ namespace SpaceGrill.Characters
         // Update is called once per frame
         internal void UpdateVelocity(Vector velocity, bool isPulsing)
         {
-            //_animator.SetBool("IsWalking", IsWalking);
-
-            //if (IsWalking)
-            //{
-            //    _animator.SetFloat("Speed", _playerController.Speed * _walkingAnimationCoefficient);
-            //}
-
             _rigidBody.velocity = new Vector2(velocity.X, _rigidBody.velocity.y);
-            if (isPulsing )
+            if (isPulsing)
             {
                 _rigidBody.AddForce(_pulseForce);
             }
 
-            if (transform.position.y < -5.5f || transform.position.y > 4.5f)
+            if (transform.position.y < -ScreenHeightMinusPlayerRadius - PlayerDiameter || transform.position.y > ScreenHeightMinusPlayerRadius)
             {
-                ((UnityVector2Facade)(transform.position.x, 4.5f)).TranslateUnityTransformToThis(transform);
+                ((UnityVector2Facade)(transform.position.x, ScreenHeightMinusPlayerRadius)).TranslateUnityTransformToThis(transform);
+            }
+
+            if (transform.position.x < -ScreenWidthMinusPlayerRadius || transform.position.x > ScreenWidthMinusPlayerRadius)
+            {
+                ((UnityVector2Facade)(Math.Sign(transform.position.x) * ScreenWidthMinusPlayerRadius, transform.position.y)).TranslateUnityTransformToThis(transform);
             }
         }
-
-        //internal void OnModeToggled(PlayerMode mode)
-        //{
-        //    gameObject.GetComponent<MeshRenderer>().material.color = modeToColor[mode];
-        //}
     }
 }

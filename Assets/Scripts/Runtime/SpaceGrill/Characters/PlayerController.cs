@@ -28,14 +28,7 @@ namespace SpaceGrill.Characters
 
         public float Speed => _speed;
 
-        //public PlayerMode Mode { get; private set; } = PlayerMode.FreeMovementMode;
-
-        //public delegate void ColorSwap(PlayerMode mode);
-        //public event ColorSwap ModeToggled;
-
         private IPlayerInput _playerInput;
-
-        private readonly CameraBehaviour _cameraBehaviour;
 
         [Inject]
         public PlayerController(PlayerBehaviour playerBehaviour,
@@ -43,7 +36,6 @@ namespace SpaceGrill.Characters
                                 IPlayerInput playerInput)
         {
             _playerBehaviour = playerBehaviour;
-            //ModeToggled += _playerBehaviour.OnModeToggled;
             _physicsSettings = physicsSettings;
             _playerInput = playerInput;
         }

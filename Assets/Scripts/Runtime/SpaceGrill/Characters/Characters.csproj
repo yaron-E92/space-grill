@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
@@ -26,10 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SpaceGrill.csproj" />
+    <ProjectReference Include="..\Utility\Utility.csproj" />
+    <ProjectReference Include="..\Settings\Settings.csproj" />
   </ItemGroup>
 </Project>
