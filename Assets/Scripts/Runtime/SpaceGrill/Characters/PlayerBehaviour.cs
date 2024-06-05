@@ -55,7 +55,6 @@ namespace SpaceGrill.Characters
 
             if (transform.position.x < -ScreenWidthMinusPlayerRadius || transform.position.x > ScreenWidthMinusPlayerRadius)
             {
-
                 ((UnityVector2Facade)(Math.Sign(transform.position.x) * ScreenWidthMinusPlayerRadius, transform.position.y)).TranslateUnityTransformToThis(transform);
             }
         }
