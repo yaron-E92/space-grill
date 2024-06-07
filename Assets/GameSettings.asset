@@ -16,3 +16,5 @@ MonoBehaviour:
     _accelerationCoefficient: 100
     _accelerationThreshold: 0.001
     VelocityThreshold: 0.01
+  GrillProgressRate: 1
+  GrillDarkeningAmount: 0.03
