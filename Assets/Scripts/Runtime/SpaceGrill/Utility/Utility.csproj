@@ -17,10 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Unity3D.SDK" Version="2021.1.14.1" />
-    <PackageReference Include="Unity3D.UnityEngine.UI" Version="2018.3.5.1" />
-    <PackageReference Include="VContainer.Standalone.Unity" Version="1.0.0" />
-    <Reference Condition="Exists('..\..\..\..\..\Library\ScriptAssemblies\Unity.TextMeshPro.dll')" Include="Unity.TextMeshPro">
+    <PackageReference Include="Unity3D" Version="2.1.3" />
+    <PackageReference Include="VContainer.Standalone.Unity" Version="1.0.0">
+      <ExcludeAssets>UnityEngine.dll</ExcludeAssets>
+    </PackageReference>
+    <Reference Include="$(UnityEngineUIPath)" Private="false" />
+    <Reference Remove="$(UnityEnginePath)" />
+    <Reference Include="$(UnityModulesPath)\UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="$(UnityModulesPath)\UnityEngine.InputLegacyModule.dll" Private="false" />
+    <Reference Condition="Exists('..\..\..\..\..\Library\ScriptAssemblies\Unity.TextMeshPro.dll')" Include="Unity.TextMeshPro" Private="false">
         <HintPath>..\..\..\..\..\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
   </ItemGroup>

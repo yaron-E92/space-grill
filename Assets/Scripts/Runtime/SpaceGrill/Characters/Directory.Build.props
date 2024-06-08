@@ -1,0 +1,5 @@
+<Project>
+    <PropertyGroup>
+        <UnityProjectPath>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\..\..\..\..'))</UnityProjectPath>
+    </PropertyGroup>
+</Project>
