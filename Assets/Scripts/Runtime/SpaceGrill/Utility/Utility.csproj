@@ -29,4 +29,7 @@
     <None Include="*.asmdef" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <DefineConstants Condition="Exists('..\..\..\..\..\Library\ScriptAssemblies\Unity.TextMeshPro.dll')">$(DefineConstants);TMPROEXISTS</DefineConstants>
+  </PropertyGroup>
 </Project>
