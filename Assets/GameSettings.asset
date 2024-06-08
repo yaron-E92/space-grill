@@ -18,3 +18,4 @@ MonoBehaviour:
     VelocityThreshold: 0.01
   GrillProgressRate: 1
   GrillDarkeningAmount: 0.03
+  Threshold: 0.19
