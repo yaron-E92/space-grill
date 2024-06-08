@@ -1,5 +1,5 @@
 <Project>
     <PropertyGroup>
-        <UnityProjectPath>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\..\..\..'))</UnityProjectPath>
+        <UnityVersion>2022.3.21f1</UnityVersion>
     </PropertyGroup>
 </Project>
