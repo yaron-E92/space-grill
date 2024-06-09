@@ -69,7 +69,7 @@ jobs:
         install-path: /home/runner/Unity/Hub/Editor
     - name: sch
       if: always()
-      run: echo $(ls /home/runner/Unity/Hub/Editor)
+      run: echo $(ls /home/runner/Unity)
     - name: Restore dependencies
       run: dotnet restore $SOLUTION_PATH
     - name: Build
