@@ -62,11 +62,18 @@ jobs:
         path: /home/runner/Unity/Hub/Editor
         key: Unity-${{env.UNITY_VERSION}}
     - name: Setup Unity
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: false #steps.cache.outputs.cache-hit != 'true'
       uses: kuler90/setup-unity@v1
       with:
         unity-version: ${{env.UNITY_VERSION}}
         install-path: /home/runner/Unity/Hub/Editor
+    - name: Setup Unity
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: |
+        curl -o /home/runner/UnityInstall/Unity-2022.3.21f1.tar.xz https://download.unity3d.com/download_unity/bf09ca542b87/LinuxEditorInstaller/Unity-2022.3.21f1.tar.xz
+        cd /home/runner/
+        tar -xJf Unity-2022.3.21f1.tar.xz
+        echo $(ls -la .)
     - name: sch
       if: always()
       run: echo $(ls -la /home/runner/Unity/Hub)
