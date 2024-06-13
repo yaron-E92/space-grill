@@ -70,8 +70,8 @@ jobs:
     - name: Setup Unity
       if: steps.cache.outputs.cache-hit != 'true'
       run: |
-        curl -o /home/runner/UnityInstall/Unity-2022.3.21f1.tar.xz https://download.unity3d.com/download_unity/bf09ca542b87/LinuxEditorInstaller/Unity-2022.3.21f1.tar.xz
-        cd /home/runner/
+        curl --create-dirs --output-dir /home/runner/UnityInstall -O https://download.unity3d.com/download_unity/bf09ca542b87/LinuxEditorInstaller/Unity-2022.3.21f1.tar.xz
+        cd /home/runner/UnityInstall
         tar -xJf Unity-2022.3.21f1.tar.xz
         echo $(ls -la .)
     - name: sch
