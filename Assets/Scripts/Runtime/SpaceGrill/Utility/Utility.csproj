@@ -34,7 +34,9 @@
   </ItemGroup>
 
   <ItemGroup Condition="Exists($(UnityEngineUIPath))">
-    <Reference Include="$(UnityEngineUIPath)" Private="false" />
+    <Reference Include="UnityEngine.UI" Private="false" >
+        <HintPath>$(UnityEngineUIPath)</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
