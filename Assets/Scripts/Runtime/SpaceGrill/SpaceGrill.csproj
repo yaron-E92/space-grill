@@ -29,8 +29,9 @@
   </ItemGroup>
 
   <ItemGroup Condition="!Exists($(UnityEngineUIPath))">
-    <PackageReference Include="Unity3D.UnityEngine.UI" Version="2018.3.5.1" />
-    <PackageReference Remove="Unity3D.UnityEngine" />
+    <PackageReference Include="Unity3D.UnityEngine.UI" Version="2018.3.5.1" >
+      <ExcludeAssets>UnityEngine.dll</ExcludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition="Exists($(UnityEngineUIPath))">
