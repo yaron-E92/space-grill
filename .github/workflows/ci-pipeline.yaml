@@ -56,8 +56,9 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 5.0.x
-    - uses: actions/cache@v4
-      id: unityInstallCache
+    - name: Restore Unity Tar cache
+      uses: actions/cache/restore@v4
+      id: unityInstallCacheRestore
       with:
         path: /home/runner/UnityInstall/${{env.UNITY_VERSION}}/Unity-${{env.UNITY_VERSION}}.tar.xz
         key: Unity-${{env.UNITY_VERSION}}-Install-${{env.GITHUB_BASE_REF}}
@@ -70,16 +71,16 @@ jobs:
         unity-version: ${{env.UNITY_VERSION}}
         install-path: /home/runner/Unity/Hub/Editor
     - name: Download Unity installation
-      if: steps.unityInstallCache.outputs.cache-hit != 'true'
+      if: steps.unityInstallCacheRestore.outputs.cache-hit != 'true'
       run: |
         curl --create-dirs --output-dir /home/runner/UnityInstall/${{env.UNITY_VERSION}} -O https://download.unity3d.com/download_unity/bf09ca542b87/LinuxEditorInstaller/Unity-${{env.UNITY_VERSION}}.tar.xz
-    - uses: actions/cache@v4
-      id: unityCache
+    - if: steps.unityInstallCacheRestore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      id: unityInstallCacheSave
       with:
-        path: /home/runner/Unity/Hub/Editor
-        key: Unity-${{env.UNITY_VERSION}}
+        path: /home/runner/UnityInstall/${{env.UNITY_VERSION}}/Unity-${{env.UNITY_VERSION}}.tar.xz
+        key: Unity-${{env.UNITY_VERSION}}-Install-${{env.GITHUB_BASE_REF}}
     - name: Setup Unity
-      if: steps.unityCache.outputs.cache-hit != 'true'
       run: |
         cd /home/runner/UnityInstall/${{env.UNITY_VERSION}}
         tar -xJf Unity-${{env.UNITY_VERSION}}.tar.xz
