@@ -56,6 +56,7 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 5.0.x
+        cache: true
     - name: Restore Unity Tar cache
       uses: actions/cache/restore@v4
       id: unityInstallCacheRestore
@@ -83,7 +84,8 @@ jobs:
     - name: Setup Unity
       run: |
         cd /home/runner/UnityInstall/${{env.UNITY_VERSION}}
-        tar -xJf Unity-${{env.UNITY_VERSION}}.tar.xz /home/runner/Unity/Hub/Editor/${{env.UNITY_VERSION}}
+        tar -xJf Unity-${{env.UNITY_VERSION}}.tar.xz
+        mv Editor/* /home/runner/Unity/Hub/Editor/${{env.UNITY_VERSION}}/Editor
         echo $(ls -la ./Editor)
     - name: sch
       if: always()
