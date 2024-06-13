@@ -21,14 +21,21 @@
     <PackageReference Include="VContainer.Standalone.Unity" Version="1.0.0">
       <ExcludeAssets>UnityEngine.dll</ExcludeAssets>
     </PackageReference>
-    <PackageReference Condition="!Exists($(UnityEngineUIPath))" Include="Unity3D.UnityEngine.UI" Version="2018.3.5.1" />
-    <Reference Condition="Exists($(UnityEngineUIPath))" Include="$(UnityEngineUIPath)" Private="false" />
     <Reference Remove="$(UnityEnginePath)" />
     <Reference Include="$(UnityModulesPath)\UnityEngine.CoreModule.dll" Private="false" />
     <Reference Include="$(UnityModulesPath)\UnityEngine.InputLegacyModule.dll" Private="false" />
     <Reference Condition="Exists('..\..\..\..\..\Library\ScriptAssemblies\Unity.TextMeshPro.dll')" Include="Unity.TextMeshPro" Private="false">
         <HintPath>..\..\..\..\..\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="!Exists($(UnityEngineUIPath))">
+    <PackageReference Include="Unity3D.UnityEngine.UI" Version="2018.3.5.1" />
+    <PackageReference Remove="Unity3D.UnityEngine" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists($(UnityEngineUIPath))">
+    <Reference Include="$(UnityEngineUIPath)" Private="false" />
   </ItemGroup>
 
   <ItemGroup>
