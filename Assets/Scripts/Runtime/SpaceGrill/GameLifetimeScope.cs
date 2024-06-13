@@ -1,9 +1,7 @@
 ﻿using SpaceGrill.Characters;
 using SpaceGrill.Settings;
 using SpaceGrill.Utility;
-
 using UnityEngine;
-
 using VContainer;
 using VContainer.Unity;
 

@@ -1,4 +1,5 @@
 ﻿using SpaceGrill.Settings;
+using SpaceGrill.Utility;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -22,15 +23,18 @@ namespace SpaceGrill.Characters
         private GameObject _currentSausage;
 
         private readonly IObjectResolver _container;
+        private ScoreTrackerBehaviour _scoreTracker;
 
         [Inject]
-        public Grillable(IObjectResolver container, GameObject sausagePrefab, GameSettings settings)
+        public Grillable(IObjectResolver container, GameObject sausagePrefab, GameSettings settings,
+            ScoreTrackerBehaviour scoreTracker)
         {
             _container = container;
             _sausagePrefab = sausagePrefab;
             ProgressRate = settings.GrillProgressRate;
             Threshold = settings.Threshold;
             GrillableBehaviour.DarkeningAmount = settings.GrillDarkeningAmount;
+            _scoreTracker = scoreTracker;
             MakeNewSausage(true);
         }
 
@@ -64,8 +68,9 @@ namespace SpaceGrill.Characters
         {
             if (!isFirstSausage)
             {
-                UnityEngine.Object.Destroy(_currentSausage);
+                Object.Destroy(_currentSausage);
                 GrillProgress = new int[] { 0, 0 };
+                _scoreTracker.IncrementScore();
             }
             _currentSausage = _container.Instantiate(_sausagePrefab, _positionOfSausage, _startingRotationOfSausage);
             _grillableBehaviours =

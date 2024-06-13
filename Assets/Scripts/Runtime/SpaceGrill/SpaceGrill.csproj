@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
@@ -17,7 +17,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Unity3D.SDK" Version="2021.1.14.1" />
+    <PackageReference Include="Unity3D" Version="2.1.3" />
     <PackageReference Include="VContainer.Standalone.Unity" Version="1.0.0" />
+    <Reference Remove="$(UnityEnginePath)" />
+    <Reference Include="$(UnityModulesPath)\UnityEngine.dll" Private="false" />
+    <Reference Include="$(UnityModulesPath)\UnityEngine.AnimationModule.dll" Private="false" />
+    <Reference Include="$(UnityModulesPath)\UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="$(UnityModulesPath)\UnityEngine.InputLegacyModule.dll" Private="false" />
+    <Reference Include="$(UnityModulesPath)\UnityEngine.Physics2DModule.dll" Private="false" />
+    <Reference Include="$(UnityModulesPath)\UnityEngine.TextRenderingModule.dll" Private="false" />
+  </ItemGroup>
+
+  <ItemGroup Condition="!Exists($(UnityEngineUIPath))">
+    <PackageReference Include="Unity3D.UnityEngine.UI" Version="2018.3.5.1" >
+      <ExcludeAssets>Unity3D.UnityEngine</ExcludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists($(UnityEngineUIPath))">
+    <Reference Include="UnityEngine.UI" Private="false" >
+        <HintPath>$(UnityEngineUIPath)</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

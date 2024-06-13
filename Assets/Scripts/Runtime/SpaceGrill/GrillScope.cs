@@ -1,6 +1,6 @@
 ﻿using SpaceGrill.Characters;
+using SpaceGrill.Utility;
 using UnityEngine;
-
 using VContainer;
 using VContainer.Unity;
 
@@ -11,9 +11,14 @@ namespace SpaceGrill
         [SerializeField]
         private GameObject _sausagePrefab;
 
+        [SerializeField]
+        private ScoreTrackerBehaviour _scoreTrackerBehaviour;
+
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<Grillable>().WithParameter(_sausagePrefab);
+            builder.RegisterComponent(_scoreTrackerBehaviour);
+            builder.RegisterEntryPoint<Grillable>().WithParameter(_sausagePrefab)
+                .WithParameter(_scoreTrackerBehaviour);
         }
     }
 }
