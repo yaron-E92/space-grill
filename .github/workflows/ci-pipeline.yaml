@@ -59,8 +59,10 @@ jobs:
     - uses: actions/cache@v4
       id: unityInstallCache
       with:
-        path: /home/runner/UnityInstall/${{env.UNITY_VERSION}}
-        key: Unity-${{env.UNITY_VERSION}}-Install
+        path: /home/runner/UnityInstall/${{env.UNITY_VERSION}}/Unity-${{env.UNITY_VERSION}}.tar.xz
+        key: Unity-${{env.UNITY_VERSION}}-Install-${{env.GITHUB_BASE_REF}}
+        restore-keys: |
+          Unity-${{env.UNITY_VERSION}}-Install
     - name: Setup Unity
       if: false #steps.cache.outputs.cache-hit != 'true'
       uses: kuler90/setup-unity@v1
