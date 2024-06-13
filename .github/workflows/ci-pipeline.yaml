@@ -57,22 +57,30 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - uses: actions/cache@v4
-      id: cache
+      id: unityInstallCache
       with:
-        path: /home/runner/Unity/Hub/Editor
-        key: Unity-${{env.UNITY_VERSION}}
+        path: /home/runner/UnityInstall/${{env.UNITY_VERSION}}
+        key: Unity-${{env.UNITY_VERSION}}-Install
     - name: Setup Unity
       if: false #steps.cache.outputs.cache-hit != 'true'
       uses: kuler90/setup-unity@v1
       with:
         unity-version: ${{env.UNITY_VERSION}}
         install-path: /home/runner/Unity/Hub/Editor
-    - name: Setup Unity
-      if: steps.cache.outputs.cache-hit != 'true'
+    - name: Download Unity installation
+      if: steps.unityInstallCache.outputs.cache-hit != 'true'
       run: |
-        curl --create-dirs --output-dir /home/runner/UnityInstall -O https://download.unity3d.com/download_unity/bf09ca542b87/LinuxEditorInstaller/Unity-2022.3.21f1.tar.xz
-        cd /home/runner/UnityInstall
-        tar -xJf Unity-2022.3.21f1.tar.xz
+        curl --create-dirs --output-dir /home/runner/UnityInstall/${{env.UNITY_VERSION}} -O https://download.unity3d.com/download_unity/bf09ca542b87/LinuxEditorInstaller/Unity-${{env.UNITY_VERSION}}.tar.xz
+    - uses: actions/cache@v4
+      id: unityCache
+      with:
+        path: /home/runner/Unity/Hub/Editor
+        key: Unity-${{env.UNITY_VERSION}}
+    - name: Setup Unity
+      if: steps.unityCache.outputs.cache-hit != 'true'
+      run: |
+        cd /home/runner/UnityInstall/${{env.UNITY_VERSION}}
+        tar -xJf Unity-${{env.UNITY_VERSION}}.tar.xz
         echo $(ls -la .)
     - name: sch
       if: always()
