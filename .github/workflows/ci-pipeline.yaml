@@ -83,11 +83,11 @@ jobs:
     - name: Setup Unity
       run: |
         cd /home/runner/UnityInstall/${{env.UNITY_VERSION}}
-        tar -xJf Unity-${{env.UNITY_VERSION}}.tar.xz
+        tar -xJf Unity-${{env.UNITY_VERSION}}.tar.xz /home/runner/Unity/Hub/Editor/${{env.UNITY_VERSION}}
         echo $(ls -la ./Editor)
     - name: sch
       if: always()
-      run: echo $(ls -la /home/runner/Unity/Hub)
+      run: echo $(ls -la /home/runner/Unity/Hub/Editor/${{env.UNITY_VERSION}}/Editor)
     - name: Restore dependencies
       run: dotnet restore $SOLUTION_PATH
     - name: Build
