@@ -58,12 +58,12 @@ jobs:
         dotnet-version: 5.0.x
     - name: Restore Unity Tar cache
       uses: actions/cache/restore@v4
-      id: unityInstallCacheRestore
+      id: unityCacheRestore
       with:
         path: /home/runner/UnityInstall/${{env.UNITY_VERSION}}/Unity-${{env.UNITY_VERSION}}.tar.xz
-        key: Unity-${{env.UNITY_VERSION}}-Install-${{env.GITHUB_BASE_REF}}
+        key: Unity-${{env.UNITY_VERSION}}-${{env.GITHUB_BASE_REF}}
         restore-keys: |
-          Unity-${{env.UNITY_VERSION}}-Install
+          Unity-${{env.UNITY_VERSION}}-
     - name: Setup Unity
       if: false #steps.cache.outputs.cache-hit != 'true'
       uses: kuler90/setup-unity@v1
@@ -71,21 +71,23 @@ jobs:
         unity-version: ${{env.UNITY_VERSION}}
         install-path: /home/runner/Unity/Hub/Editor
     - name: Download Unity installation
-      if: steps.unityInstallCacheRestore.outputs.cache-hit != 'true'
+      if: steps.unityCacheRestore.outputs.cache-hit != 'true'
       run: |
         curl --create-dirs --output-dir /home/runner/UnityInstall/${{env.UNITY_VERSION}} -O https://download.unity3d.com/download_unity/bf09ca542b87/LinuxEditorInstaller/Unity-${{env.UNITY_VERSION}}.tar.xz
-    - if: steps.unityInstallCacheRestore.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v4
-      id: unityInstallCacheSave
-      with:
-        path: /home/runner/UnityInstall/${{env.UNITY_VERSION}}/Unity-${{env.UNITY_VERSION}}.tar.xz
-        key: Unity-${{env.UNITY_VERSION}}-Install-${{env.GITHUB_BASE_REF}}
     - name: Setup Unity
+      if: steps.unityCacheRestore.outputs.cache-hit != 'true'
       run: |
         cd /home/runner/UnityInstall/${{env.UNITY_VERSION}}
         tar -xJf Unity-${{env.UNITY_VERSION}}.tar.xz
+        mkdir -p /home/runner/Unity/Hub/Editor/${{env.UNITY_VERSION}}/Editor
         mv Editor/* /home/runner/Unity/Hub/Editor/${{env.UNITY_VERSION}}/Editor
         echo $(ls -la ./Editor)
+    - if: steps.unityCacheRestore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      id: unityCacheSave
+      with:
+        path: /home/runner/Unity/Hub/Editor/${{env.UNITY_VERSION}}/Editor
+        key: Unity-${{env.UNITY_VERSION}}-${{env.GITHUB_BASE_REF}}
     - name: sch
       if: always()
       run: echo $(ls -la /home/runner/Unity/Hub/Editor/${{env.UNITY_VERSION}}/Editor)
