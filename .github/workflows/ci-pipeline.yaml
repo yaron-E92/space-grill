@@ -81,7 +81,7 @@ jobs:
       run: |
         cd /home/runner/UnityInstall/${{env.UNITY_VERSION}}
         tar -xJf Unity-${{env.UNITY_VERSION}}.tar.xz
-        echo $(ls -la .)
+        echo $(ls -la ./Editor)
     - name: sch
       if: always()
       run: echo $(ls -la /home/runner/Unity/Hub)
