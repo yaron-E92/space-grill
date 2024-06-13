@@ -56,7 +56,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 5.0.x
-        cache: true
     - name: Restore Unity Tar cache
       uses: actions/cache/restore@v4
       id: unityInstallCacheRestore
